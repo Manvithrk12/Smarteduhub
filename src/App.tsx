@@ -7,8 +7,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Students from "./pages/Students";
 import Teachers from "./pages/Teachers";
+import Principals from "./pages/Principals";
 import Attendance from "./pages/Attendance";
+import AttendanceNotices from "./pages/AttendanceNotices";
 import Assignments from "./pages/Assignments";
+import StudentPerformance from "./pages/StudentPerformance";
+import TeacherPerformance from "./pages/TeacherPerformance";
+import FeedbackForms from "./pages/FeedbackForms";
+import DoubtSessions from "./pages/DoubtSessions";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
@@ -24,8 +30,14 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/students" element={<Students />} />
           <Route path="/teachers" element={<Teachers />} />
+          <Route path="/principals" element={<Principals />} />
           <Route path="/attendance" element={<Attendance />} />
+          <Route path="/attendance-notices" element={<AttendanceNotices />} />
           <Route path="/assignments" element={<Assignments />} />
+          <Route path="/student-performance" element={<StudentPerformance />} />
+          <Route path="/teacher-performance" element={<TeacherPerformance />} />
+          <Route path="/feedback-forms" element={<FeedbackForms />} />
+          <Route path="/doubt-sessions" element={<DoubtSessions />} />
           <Route path="/profile" element={<Profile />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

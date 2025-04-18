@@ -25,9 +25,9 @@ const initialTeachers = [
   { id: 8, name: "Dr. Jennifer Adams", subject: "Psychology", employeeId: "T1008", email: "jennifer.adams@example.com", phone: "123-456-7897" },
 ]
 
-// Teacher form interface
+// Updated Teacher form interface with id as required
 interface TeacherForm {
-  id?: number
+  id: number
   name: string
   subject: string
   employeeId: string
@@ -36,10 +36,11 @@ interface TeacherForm {
 }
 
 const Teachers = () => {
-  const [teachers, setTeachers] = useState(initialTeachers)
+  const [teachers, setTeachers] = useState<TeacherForm[]>(initialTeachers)
   const [searchTerm, setSearchTerm] = useState("")
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [currentTeacher, setCurrentTeacher] = useState<TeacherForm>({
+    id: 0,
     name: "",
     subject: "",
     employeeId: "",
@@ -85,7 +86,7 @@ const Teachers = () => {
       // Add new teacher
       const newTeacher = {
         ...currentTeacher,
-        id: Math.max(...teachers.map(t => t.id)) + 1
+        id: Math.max(...teachers.map(t => t.id), 0) + 1
       }
       setTeachers([...teachers, newTeacher])
     }
@@ -93,6 +94,7 @@ const Teachers = () => {
     // Reset form and close dialog
     setIsEditDialogOpen(false)
     setCurrentTeacher({
+      id: 0,
       name: "",
       subject: "",
       employeeId: "",

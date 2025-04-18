@@ -27,9 +27,9 @@ const initialStudents = [
   { id: 10, name: "Isabella Rodriguez", grade: "10", rollNo: "1004", email: "isabella.rodriguez@example.com", phone: "123-456-7899" },
 ]
 
-// Student form interface
+// Updated Student form interface with id as required
 interface StudentForm {
-  id?: number
+  id: number
   name: string
   grade: string
   rollNo: string
@@ -38,10 +38,11 @@ interface StudentForm {
 }
 
 const Students = () => {
-  const [students, setStudents] = useState(initialStudents)
+  const [students, setStudents] = useState<StudentForm[]>(initialStudents)
   const [searchTerm, setSearchTerm] = useState("")
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [currentStudent, setCurrentStudent] = useState<StudentForm>({
+    id: 0,
     name: "",
     grade: "",
     rollNo: "",
@@ -87,7 +88,7 @@ const Students = () => {
       // Add new student
       const newStudent = {
         ...currentStudent,
-        id: Math.max(...students.map(s => s.id)) + 1
+        id: Math.max(...students.map(s => s.id), 0) + 1
       }
       setStudents([...students, newStudent])
     }
@@ -95,6 +96,7 @@ const Students = () => {
     // Reset form and close dialog
     setIsEditDialogOpen(false)
     setCurrentStudent({
+      id: 0,
       name: "",
       grade: "",
       rollNo: "",

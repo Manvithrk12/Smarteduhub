@@ -20,8 +20,21 @@ import { Badge } from "@/components/ui/badge"
 import { CheckCircle, AlertCircle, Search, BarChart2, FilterX } from "lucide-react"
 import MainLayout from "@/components/layout/MainLayout"
 
+// Performance data interface
+interface TeacherPerformanceData {
+  id: number
+  name: string
+  subject: string
+  rating: number
+  studentPassRate: number
+  attendanceRate: number
+  feedbackScore: number
+  classesCompleted: number
+  performanceLevel: "excellent" | "good" | "average" | "poor"
+}
+
 // Sample teacher performance data
-const initialPerformanceData = [
+const initialPerformanceData: TeacherPerformanceData[] = [
   { 
     id: 1, 
     name: "Dr. Sarah Johnson", 
@@ -89,19 +102,6 @@ const initialPerformanceData = [
     performanceLevel: "average"
   },
 ]
-
-// Performance data interface
-interface TeacherPerformanceData {
-  id: number
-  name: string
-  subject: string
-  rating: number
-  studentPassRate: number
-  attendanceRate: number
-  feedbackScore: number
-  classesCompleted: number
-  performanceLevel: "excellent" | "good" | "average" | "poor"
-}
 
 // Stats calculation helper function
 const calculateStats = (data: TeacherPerformanceData[]) => {

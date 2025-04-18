@@ -15,8 +15,21 @@ import { AlertTriangle, Bell, Check, Search, Send, X } from "lucide-react"
 import MainLayout from "@/components/layout/MainLayout"
 import { toast } from "@/components/ui/use-toast"
 
+// Attendance notice interface
+interface AttendanceNotice {
+  id: number
+  studentName: string
+  studentId: string
+  grade: string
+  subject: string
+  attendancePercentage: number
+  lastAttendance: string
+  status: "pending" | "sent" | "resolved"
+  createdAt: string
+}
+
 // Sample attendance notices data
-const initialNotices = [
+const initialNotices: AttendanceNotice[] = [
   { 
     id: 1, 
     studentName: "John Doe", 
@@ -73,19 +86,6 @@ const initialNotices = [
     createdAt: "2025-04-15"
   },
 ]
-
-// Attendance notice interface
-interface AttendanceNotice {
-  id: number
-  studentName: string
-  studentId: string
-  grade: string
-  subject: string
-  attendancePercentage: number
-  lastAttendance: string
-  status: "pending" | "sent" | "resolved"
-  createdAt: string
-}
 
 const AttendanceNotices = () => {
   const [notices, setNotices] = useState<AttendanceNotice[]>(initialNotices)

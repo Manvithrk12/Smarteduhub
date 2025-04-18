@@ -29,8 +29,20 @@ import {
 import MainLayout from "@/components/layout/MainLayout"
 import { toast } from "@/components/ui/use-toast"
 
+// Feedback form interface
+interface FeedbackForm {
+  id: number
+  title: string
+  type: "teacher" | "course" | "infrastructure" | "exam" | "parent"
+  dueDate: string
+  status: "active" | "completed" | "draft"
+  submissions: number
+  totalRecipients: number
+  lastUpdated: string
+}
+
 // Sample feedback forms data
-const initialFeedbackForms = [
+const initialFeedbackForms: FeedbackForm[] = [
   { 
     id: 1, 
     title: "Teacher Performance Evaluation", 
@@ -83,27 +95,6 @@ const initialFeedbackForms = [
   },
 ]
 
-// Sample teacher list for feedback assignment
-const teachersList = [
-  { id: 1, name: "Dr. Sarah Johnson", subject: "Mathematics" },
-  { id: 2, name: "Prof. James Wilson", subject: "Physics" },
-  { id: 3, name: "Ms. Emily Parker", subject: "Biology" },
-  { id: 4, name: "Mr. David Miller", subject: "Chemistry" },
-  { id: 5, name: "Dr. Robert Brown", subject: "English Literature" },
-]
-
-// Feedback form interface
-interface FeedbackForm {
-  id: number
-  title: string
-  type: "teacher" | "course" | "infrastructure" | "exam" | "parent"
-  dueDate: string
-  status: "active" | "completed" | "draft"
-  submissions: number
-  totalRecipients: number
-  lastUpdated: string
-}
-
 // New form state interface
 interface NewFormState {
   title: string
@@ -112,6 +103,15 @@ interface NewFormState {
   questions: string[]
   assignTo: number[]
 }
+
+// Sample teacher list for feedback assignment
+const teachersList = [
+  { id: 1, name: "Dr. Sarah Johnson", subject: "Mathematics" },
+  { id: 2, name: "Prof. James Wilson", subject: "Physics" },
+  { id: 3, name: "Ms. Emily Parker", subject: "Biology" },
+  { id: 4, name: "Mr. David Miller", subject: "Chemistry" },
+  { id: 5, name: "Dr. Robert Brown", subject: "English Literature" },
+]
 
 const FeedbackForms = () => {
   const [feedbackForms, setFeedbackForms] = useState<FeedbackForm[]>(initialFeedbackForms)

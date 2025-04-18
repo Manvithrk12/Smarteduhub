@@ -113,6 +113,7 @@ const Students = () => {
   // Handle adding new student
   const handleAddNew = () => {
     setCurrentStudent({
+      id: 0,  // Make sure to include the id property here
       name: "",
       grade: "",
       rollNo: "",

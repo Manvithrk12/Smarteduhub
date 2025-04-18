@@ -111,6 +111,7 @@ const Teachers = () => {
   // Handle adding new teacher
   const handleAddNew = () => {
     setCurrentTeacher({
+      id: 0,  // Make sure to include the id property here
       name: "",
       subject: "",
       employeeId: "",

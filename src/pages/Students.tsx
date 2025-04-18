@@ -1,0 +1,258 @@
+
+import { useState } from "react"
+import { 
+  Table, TableBody, TableCaption, TableCell, 
+  TableHead, TableHeader, TableRow 
+} from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { 
+  Dialog, DialogContent, DialogDescription, 
+  DialogFooter, DialogHeader, DialogTitle, DialogTrigger 
+} from "@/components/ui/dialog"
+import { Pencil, Plus, Trash2, Search } from "lucide-react"
+import MainLayout from "@/components/layout/MainLayout"
+
+// Sample student data
+const initialStudents = [
+  { id: 1, name: "John Doe", grade: "10", rollNo: "1001", email: "john.doe@example.com", phone: "123-456-7890" },
+  { id: 2, name: "Emma Wilson", grade: "10", rollNo: "1002", email: "emma.wilson@example.com", phone: "123-456-7891" },
+  { id: 3, name: "Michael Brown", grade: "11", rollNo: "1101", email: "michael.brown@example.com", phone: "123-456-7892" },
+  { id: 4, name: "Sophia Martinez", grade: "9", rollNo: "901", email: "sophia.martinez@example.com", phone: "123-456-7893" },
+  { id: 5, name: "William Johnson", grade: "12", rollNo: "1201", email: "william.johnson@example.com", phone: "123-456-7894" },
+  { id: 6, name: "Olivia Davis", grade: "10", rollNo: "1003", email: "olivia.davis@example.com", phone: "123-456-7895" },
+  { id: 7, name: "James Miller", grade: "11", rollNo: "1102", email: "james.miller@example.com", phone: "123-456-7896" },
+  { id: 8, name: "Ava Wilson", grade: "9", rollNo: "902", email: "ava.wilson@example.com", phone: "123-456-7897" },
+  { id: 9, name: "Alexander Thompson", grade: "12", rollNo: "1202", email: "alex.thompson@example.com", phone: "123-456-7898" },
+  { id: 10, name: "Isabella Rodriguez", grade: "10", rollNo: "1004", email: "isabella.rodriguez@example.com", phone: "123-456-7899" },
+]
+
+// Student form interface
+interface StudentForm {
+  id?: number
+  name: string
+  grade: string
+  rollNo: string
+  email: string
+  phone: string
+}
+
+const Students = () => {
+  const [students, setStudents] = useState(initialStudents)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [currentStudent, setCurrentStudent] = useState<StudentForm>({
+    name: "",
+    grade: "",
+    rollNo: "",
+    email: "",
+    phone: ""
+  })
+
+  // Filter students based on search term
+  const filteredStudents = students.filter(student => 
+    student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    student.rollNo.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  // Handle search input change
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value)
+  }
+
+  // Handle opening edit dialog
+  const handleEditClick = (student: StudentForm) => {
+    setCurrentStudent(student)
+    setIsEditDialogOpen(true)
+  }
+
+  // Handle form input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setCurrentStudent({
+      ...currentStudent,
+      [name]: value
+    })
+  }
+
+  // Handle form submission
+  const handleSubmit = () => {
+    if (currentStudent.id) {
+      // Update existing student
+      setStudents(students.map(student => 
+        student.id === currentStudent.id ? currentStudent : student
+      ))
+    } else {
+      // Add new student
+      const newStudent = {
+        ...currentStudent,
+        id: Math.max(...students.map(s => s.id)) + 1
+      }
+      setStudents([...students, newStudent])
+    }
+    
+    // Reset form and close dialog
+    setIsEditDialogOpen(false)
+    setCurrentStudent({
+      name: "",
+      grade: "",
+      rollNo: "",
+      email: "",
+      phone: ""
+    })
+  }
+
+  // Handle student deletion
+  const handleDelete = (id: number) => {
+    setStudents(students.filter(student => student.id !== id))
+  }
+
+  // Handle adding new student
+  const handleAddNew = () => {
+    setCurrentStudent({
+      name: "",
+      grade: "",
+      rollNo: "",
+      email: "",
+      phone: ""
+    })
+    setIsEditDialogOpen(true)
+  }
+
+  return (
+    <MainLayout>
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold">Students</h1>
+          <Button onClick={handleAddNew}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Student
+          </Button>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <div className="relative flex-1">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search students..."
+              className="pl-8"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </div>
+        </div>
+
+        <Table>
+          <TableCaption>A list of all students in the system.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Grade</TableHead>
+              <TableHead>Roll No</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Phone</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredStudents.map((student) => (
+              <TableRow key={student.id}>
+                <TableCell className="font-medium">{student.name}</TableCell>
+                <TableCell>{student.grade}</TableCell>
+                <TableCell>{student.rollNo}</TableCell>
+                <TableCell>{student.email}</TableCell>
+                <TableCell>{student.phone}</TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end space-x-2">
+                    <Button variant="outline" size="icon" onClick={() => handleEditClick(student)}>
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" size="icon" className="text-destructive" onClick={() => handleDelete(student.id)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{currentStudent.id ? "Edit Student" : "Add New Student"}</DialogTitle>
+              <DialogDescription>
+                {currentStudent.id 
+                  ? "Update student information below." 
+                  : "Fill in the details to add a new student."}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-1 gap-4">
+                <div className="space-y-2">
+                  <label htmlFor="name" className="text-sm font-medium">Full Name</label>
+                  <Input
+                    id="name"
+                    name="name"
+                    value={currentStudent.name}
+                    onChange={handleInputChange}
+                    placeholder="Enter full name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="grade" className="text-sm font-medium">Grade</label>
+                  <Input
+                    id="grade"
+                    name="grade"
+                    value={currentStudent.grade}
+                    onChange={handleInputChange}
+                    placeholder="Enter grade"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="rollNo" className="text-sm font-medium">Roll Number</label>
+                  <Input
+                    id="rollNo"
+                    name="rollNo"
+                    value={currentStudent.rollNo}
+                    onChange={handleInputChange}
+                    placeholder="Enter roll number"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="email" className="text-sm font-medium">Email</label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={currentStudent.email}
+                    onChange={handleInputChange}
+                    placeholder="Enter email address"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="phone" className="text-sm font-medium">Phone</label>
+                  <Input
+                    id="phone"
+                    name="phone"
+                    value={currentStudent.phone}
+                    onChange={handleInputChange}
+                    placeholder="Enter phone number"
+                  />
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>Cancel</Button>
+              <Button onClick={handleSubmit}>Save</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </MainLayout>
+  )
+}
+
+export default Students

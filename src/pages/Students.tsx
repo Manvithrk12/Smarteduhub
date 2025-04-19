@@ -6,250 +6,228 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { 
-  Dialog, DialogContent, DialogDescription, 
-  DialogFooter, DialogHeader, DialogTitle, DialogTrigger 
+import {
+  Dialog, DialogContent, DialogDescription,
+  DialogFooter, DialogHeader, DialogTitle, DialogTrigger
 } from "@/components/ui/dialog"
-import { Pencil, Plus, Trash2, Search } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { FileText, MessageSquare, Star } from "lucide-react"
 import MainLayout from "@/components/layout/MainLayout"
 
-// Sample student data
-const initialStudents = [
-  { id: 1, name: "John Doe", grade: "10", rollNo: "1001", email: "john.doe@example.com", phone: "123-456-7890" },
-  { id: 2, name: "Emma Wilson", grade: "10", rollNo: "1002", email: "emma.wilson@example.com", phone: "123-456-7891" },
-  { id: 3, name: "Michael Brown", grade: "11", rollNo: "1101", email: "michael.brown@example.com", phone: "123-456-7892" },
-  { id: 4, name: "Sophia Martinez", grade: "9", rollNo: "901", email: "sophia.martinez@example.com", phone: "123-456-7893" },
-  { id: 5, name: "William Johnson", grade: "12", rollNo: "1201", email: "william.johnson@example.com", phone: "123-456-7894" },
-  { id: 6, name: "Olivia Davis", grade: "10", rollNo: "1003", email: "olivia.davis@example.com", phone: "123-456-7895" },
-  { id: 7, name: "James Miller", grade: "11", rollNo: "1102", email: "james.miller@example.com", phone: "123-456-7896" },
-  { id: 8, name: "Ava Wilson", grade: "9", rollNo: "902", email: "ava.wilson@example.com", phone: "123-456-7897" },
-  { id: 9, name: "Alexander Thompson", grade: "12", rollNo: "1202", email: "alex.thompson@example.com", phone: "123-456-7898" },
-  { id: 10, name: "Isabella Rodriguez", grade: "10", rollNo: "1004", email: "isabella.rodriguez@example.com", phone: "123-456-7899" },
-]
-
-// Updated Student form interface with id as required
-interface StudentForm {
+interface Assignment {
   id: number
-  name: string
-  grade: string
-  rollNo: string
-  email: string
-  phone: string
+  subject: string
+  title: string
+  dueDate: string
+  status: "pending" | "submitted"
 }
 
-const Students = () => {
-  const [students, setStudents] = useState<StudentForm[]>(initialStudents)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-  const [currentStudent, setCurrentStudent] = useState<StudentForm>({
-    id: 0,
-    name: "",
-    grade: "",
-    rollNo: "",
-    email: "",
-    phone: ""
-  })
+interface DoubtSession {
+  id: number
+  subject: string
+  teacherName: string
+  status: "available" | "busy"
+}
 
-  // Filter students based on search term
-  const filteredStudents = students.filter(student => 
-    student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.rollNo.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+interface Feedback {
+  id: number
+  date: string
+  subject: string
+  teacherName: string
+  message: string
+}
 
-  // Handle search input change
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value)
+// Sample data
+const sampleAssignments: Assignment[] = [
+  {
+    id: 1,
+    subject: "Mathematics",
+    title: "Algebra Exercise Set 1",
+    dueDate: "2025-04-25",
+    status: "pending"
+  },
+  {
+    id: 2,
+    subject: "Physics",
+    title: "Force and Motion Problems",
+    dueDate: "2025-04-23",
+    status: "submitted"
   }
+]
 
-  // Handle opening edit dialog
-  const handleEditClick = (student: StudentForm) => {
-    setCurrentStudent(student)
-    setIsEditDialogOpen(true)
+const sampleDoubtSessions: DoubtSession[] = [
+  {
+    id: 1,
+    subject: "Mathematics",
+    teacherName: "Mr. Smith",
+    status: "available"
+  },
+  {
+    id: 2,
+    subject: "Physics",
+    teacherName: "Mrs. Johnson",
+    status: "busy"
   }
+]
 
-  // Handle form input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setCurrentStudent({
-      ...currentStudent,
-      [name]: value
-    })
+const sampleFeedback: Feedback[] = [
+  {
+    id: 1,
+    date: "2025-04-18",
+    subject: "Mathematics",
+    teacherName: "Mr. Smith",
+    message: "Excellent progress in problem-solving skills"
   }
+]
 
-  // Handle form submission
-  const handleSubmit = () => {
-    if (currentStudent.id) {
-      // Update existing student
-      setStudents(students.map(student => 
-        student.id === currentStudent.id ? currentStudent : student
-      ))
-    } else {
-      // Add new student
-      const newStudent = {
-        ...currentStudent,
-        id: Math.max(...students.map(s => s.id), 0) + 1
-      }
-      setStudents([...students, newStudent])
-    }
-    
-    // Reset form and close dialog
-    setIsEditDialogOpen(false)
-    setCurrentStudent({
-      id: 0,
-      name: "",
-      grade: "",
-      rollNo: "",
-      email: "",
-      phone: ""
-    })
-  }
+export default function Students() {
+  const [activeTab, setActiveTab] = useState("assignments")
+  const [showDoubtDialog, setShowDoubtDialog] = useState(false)
+  const [selectedTeacher, setSelectedTeacher] = useState<DoubtSession | null>(null)
 
-  // Handle student deletion
-  const handleDelete = (id: number) => {
-    setStudents(students.filter(student => student.id !== id))
-  }
-
-  // Handle adding new student
-  const handleAddNew = () => {
-    setCurrentStudent({
-      id: 0,  // Make sure to include the id property here
-      name: "",
-      grade: "",
-      rollNo: "",
-      email: "",
-      phone: ""
-    })
-    setIsEditDialogOpen(true)
+  const requestDoubtSession = (teacher: DoubtSession) => {
+    setSelectedTeacher(teacher)
+    setShowDoubtDialog(true)
   }
 
   return (
     <MainLayout>
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Students</h1>
-          <Button onClick={handleAddNew}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Student
-          </Button>
-        </div>
+        <h1 className="text-3xl font-bold">Student Dashboard</h1>
+        
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="assignments">
+              <FileText className="w-4 h-4 mr-2" />
+              Assignments
+            </TabsTrigger>
+            <TabsTrigger value="doubt-sessions">
+              <MessageSquare className="w-4 h-4 mr-2" />
+              Doubt Sessions
+            </TabsTrigger>
+            <TabsTrigger value="feedback">
+              <Star className="w-4 h-4 mr-2" />
+              Feedback
+            </TabsTrigger>
+          </TabsList>
 
-        <div className="flex items-center space-x-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search students..."
-              className="pl-8"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-          </div>
-        </div>
+          <TabsContent value="assignments" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Current Assignments</CardTitle>
+                <CardDescription>View and manage your assignments</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Subject</TableHead>
+                      <TableHead>Title</TableHead>
+                      <TableHead>Due Date</TableHead>
+                      <TableHead>Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {sampleAssignments.map((assignment) => (
+                      <TableRow key={assignment.id}>
+                        <TableCell>{assignment.subject}</TableCell>
+                        <TableCell>{assignment.title}</TableCell>
+                        <TableCell>{assignment.dueDate}</TableCell>
+                        <TableCell>{assignment.status}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        <Table>
-          <TableCaption>A list of all students in the system.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Grade</TableHead>
-              <TableHead>Roll No</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredStudents.map((student) => (
-              <TableRow key={student.id}>
-                <TableCell className="font-medium">{student.name}</TableCell>
-                <TableCell>{student.grade}</TableCell>
-                <TableCell>{student.rollNo}</TableCell>
-                <TableCell>{student.email}</TableCell>
-                <TableCell>{student.phone}</TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end space-x-2">
-                    <Button variant="outline" size="icon" onClick={() => handleEditClick(student)}>
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="icon" className="text-destructive" onClick={() => handleDelete(student.id)}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+          <TabsContent value="doubt-sessions" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Available Teachers</CardTitle>
+                <CardDescription>Request a doubt clearing session</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Subject</TableHead>
+                      <TableHead>Teacher</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {sampleDoubtSessions.map((session) => (
+                      <TableRow key={session.id}>
+                        <TableCell>{session.subject}</TableCell>
+                        <TableCell>{session.teacherName}</TableCell>
+                        <TableCell>{session.status}</TableCell>
+                        <TableCell>
+                          <Button
+                            variant="outline"
+                            disabled={session.status === "busy"}
+                            onClick={() => requestDoubtSession(session)}
+                          >
+                            Request Session
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <TabsContent value="feedback" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Teacher Feedback</CardTitle>
+                <CardDescription>View feedback from your teachers</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Subject</TableHead>
+                      <TableHead>Teacher</TableHead>
+                      <TableHead>Feedback</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {sampleFeedback.map((feedback) => (
+                      <TableRow key={feedback.id}>
+                        <TableCell>{feedback.date}</TableCell>
+                        <TableCell>{feedback.subject}</TableCell>
+                        <TableCell>{feedback.teacherName}</TableCell>
+                        <TableCell>{feedback.message}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+
+        <Dialog open={showDoubtDialog} onOpenChange={setShowDoubtDialog}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{currentStudent.id ? "Edit Student" : "Add New Student"}</DialogTitle>
+              <DialogTitle>Request Doubt Session</DialogTitle>
               <DialogDescription>
-                {currentStudent.id 
-                  ? "Update student information below." 
-                  : "Fill in the details to add a new student."}
+                Request a doubt clearing session with {selectedTeacher?.teacherName} for {selectedTeacher?.subject}
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-1 gap-4">
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-sm font-medium">Full Name</label>
-                  <Input
-                    id="name"
-                    name="name"
-                    value={currentStudent.name}
-                    onChange={handleInputChange}
-                    placeholder="Enter full name"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="grade" className="text-sm font-medium">Grade</label>
-                  <Input
-                    id="grade"
-                    name="grade"
-                    value={currentStudent.grade}
-                    onChange={handleInputChange}
-                    placeholder="Enter grade"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="rollNo" className="text-sm font-medium">Roll Number</label>
-                  <Input
-                    id="rollNo"
-                    name="rollNo"
-                    value={currentStudent.rollNo}
-                    onChange={handleInputChange}
-                    placeholder="Enter roll number"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium">Email</label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={currentStudent.email}
-                    onChange={handleInputChange}
-                    placeholder="Enter email address"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="phone" className="text-sm font-medium">Phone</label>
-                  <Input
-                    id="phone"
-                    name="phone"
-                    value={currentStudent.phone}
-                    onChange={handleInputChange}
-                    placeholder="Enter phone number"
-                  />
-                </div>
-              </div>
+            <div className="space-y-4">
+              <Input placeholder="Enter your doubt or question" />
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>Cancel</Button>
-              <Button onClick={handleSubmit}>Save</Button>
+              <Button variant="outline" onClick={() => setShowDoubtDialog(false)}>Cancel</Button>
+              <Button onClick={() => setShowDoubtDialog(false)}>Send Request</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -257,5 +235,3 @@ const Students = () => {
     </MainLayout>
   )
 }
-
-export default Students

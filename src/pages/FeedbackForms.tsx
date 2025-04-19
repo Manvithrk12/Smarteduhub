@@ -29,20 +29,8 @@ import {
 import MainLayout from "@/components/layout/MainLayout"
 import { toast } from "@/components/ui/use-toast"
 
-// Feedback form interface
-interface FeedbackForm {
-  id: number
-  title: string
-  type: "teacher" | "course" | "infrastructure" | "exam" | "parent"
-  dueDate: string
-  status: "active" | "completed" | "draft"
-  submissions: number
-  totalRecipients: number
-  lastUpdated: string
-}
-
 // Sample feedback forms data
-const initialFeedbackForms: FeedbackForm[] = [
+const initialFeedbackForms = [
   { 
     id: 1, 
     title: "Teacher Performance Evaluation", 
@@ -95,15 +83,6 @@ const initialFeedbackForms: FeedbackForm[] = [
   },
 ]
 
-// New form state interface
-interface NewFormState {
-  title: string
-  type: "teacher" | "course" | "infrastructure" | "exam" | "parent"
-  dueDate: string
-  questions: string[]
-  assignTo: number[]
-}
-
 // Sample teacher list for feedback assignment
 const teachersList = [
   { id: 1, name: "Dr. Sarah Johnson", subject: "Mathematics" },
@@ -112,6 +91,27 @@ const teachersList = [
   { id: 4, name: "Mr. David Miller", subject: "Chemistry" },
   { id: 5, name: "Dr. Robert Brown", subject: "English Literature" },
 ]
+
+// Feedback form interface
+interface FeedbackForm {
+  id: number
+  title: string
+  type: "teacher" | "course" | "infrastructure" | "exam" | "parent"
+  dueDate: string
+  status: "active" | "completed" | "draft"
+  submissions: number
+  totalRecipients: number
+  lastUpdated: string
+}
+
+// New form state interface
+interface NewFormState {
+  title: string
+  type: "teacher" | "course" | "infrastructure" | "exam" | "parent"
+  dueDate: string
+  questions: string[]
+  assignTo: number[]
+}
 
 const FeedbackForms = () => {
   const [feedbackForms, setFeedbackForms] = useState<FeedbackForm[]>(initialFeedbackForms)

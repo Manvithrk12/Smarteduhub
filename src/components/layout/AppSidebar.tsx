@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react"
+
+import { useState } from "react"
 import { NavLink } from "react-router-dom"
 import { 
   School, Users, UserCog, GraduationCap, Settings, 
   BookOpen, CalendarCheck, FileText, MessageSquare, 
-  AlertTriangle, PieChart, ClipboardCheck, UserCircle,
-  LogOut
+  AlertTriangle, PieChart, ClipboardCheck, UserCircle
 } from "lucide-react"
 import {
   Sidebar,
@@ -16,8 +16,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { useAuth } from "@/contexts/AuthContext"
-import { Button } from "@/components/ui/button"
 
 // Define menu items for each role
 const adminMenuItems = [
@@ -55,16 +53,8 @@ const studentMenuItems = [
 ]
 
 export function AppSidebar() {
-  const { profile, signOut } = useAuth()
-  // Use profile role from authentication or default to admin
-  const [userRole, setUserRole] = useState(profile?.role || "admin")
-  
-  // Update role when profile changes
-  useEffect(() => {
-    if (profile?.role) {
-      setUserRole(profile.role)
-    }
-  }, [profile])
+  // In a real application, this would come from an authentication context
+  const [userRole, setUserRole] = useState("admin") // Default to admin for now
   
   // Select menu items based on user role
   const getMenuItems = () => {
@@ -81,6 +71,11 @@ export function AppSidebar() {
         return adminMenuItems
     }
   }
+  
+  // Role switcher for demo purposes (would be removed in production)
+  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setUserRole(e.target.value)
+  }
 
   return (
     <Sidebar>
@@ -88,24 +83,19 @@ export function AppSidebar() {
         <div className="p-4">
           <h1 className="text-2xl font-bold text-primary">SmartEduHub</h1>
           
-          <div className="mt-4 mb-2">
-            <p className="text-sm text-muted-foreground">
-              Logged in as: <span className="font-medium">{profile?.first_name || 'User'}</span>
-            </p>
-            <p className="text-xs text-muted-foreground capitalize">
-              Role: {userRole}
-            </p>
+          {/* Role switcher (for demo only) */}
+          <div className="mt-4">
+            <select 
+              value={userRole} 
+              onChange={handleRoleChange}
+              className="w-full p-2 border rounded bg-background text-sm"
+            >
+              <option value="admin">Admin View</option>
+              <option value="principal">Principal View</option>
+              <option value="teacher">Teacher View</option>
+              <option value="student">Student View</option>
+            </select>
           </div>
-          
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full mt-2"
-            onClick={signOut}
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Sign Out
-          </Button>
         </div>
         
         <SidebarGroup>

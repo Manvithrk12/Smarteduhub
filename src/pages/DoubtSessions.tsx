@@ -35,34 +35,8 @@ import {
 import MainLayout from "@/components/layout/MainLayout"
 import { toast } from "@/components/ui/use-toast"
 
-// Session interfaces
-interface TeacherSession {
-  id: number
-  studentName: string
-  grade: string
-  subject: string
-  topic: string
-  date: string
-  time: string
-  status: "pending" | "accepted" | "rejected" | "completed"
-  message: string
-  createdAt: string
-}
-
-interface StudentSession {
-  id: number
-  teacherName: string
-  subject: string
-  topic: string
-  date: string
-  time: string
-  status: "pending" | "accepted" | "rejected" | "completed"
-  message: string
-  createdAt: string
-}
-
 // Sample doubt sessions data for teacher view
-const initialTeacherSessions: TeacherSession[] = [
+const initialTeacherSessions = [
   { 
     id: 1, 
     studentName: "John Doe", 
@@ -126,7 +100,7 @@ const initialTeacherSessions: TeacherSession[] = [
 ]
 
 // Sample doubt sessions data for student view
-const initialStudentSessions: StudentSession[] = [
+const initialStudentSessions = [
   { 
     id: 1, 
     teacherName: "Dr. Sarah Johnson", 
@@ -161,6 +135,32 @@ const initialStudentSessions: StudentSession[] = [
     createdAt: "2025-04-13"
   },
 ]
+
+// Session interfaces
+interface TeacherSession {
+  id: number
+  studentName: string
+  grade: string
+  subject: string
+  topic: string
+  date: string
+  time: string
+  status: "pending" | "accepted" | "rejected" | "completed"
+  message: string
+  createdAt: string
+}
+
+interface StudentSession {
+  id: number
+  teacherName: string
+  subject: string
+  topic: string
+  date: string
+  time: string
+  status: "pending" | "accepted" | "rejected" | "completed"
+  message: string
+  createdAt: string
+}
 
 // New session request interface
 interface NewSessionRequest {

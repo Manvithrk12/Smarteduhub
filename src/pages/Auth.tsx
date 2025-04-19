@@ -8,24 +8,19 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { toast } from "@/components/ui/use-toast"
 
 export default function Auth() {
-  const [isLogin, setIsLogin] = useState(true)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const { signIn, signUp } = useAuth()
+  const { signIn } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      if (isLogin) {
-        await signIn(email, password)
-      } else {
-        await signUp(email, password)
-      }
+      await signIn(email, password)
       navigate('/')
       toast({
-        title: isLogin ? "Welcome back!" : "Account created successfully",
-        description: isLogin ? "You have been logged in." : "Please check your email to verify your account.",
+        title: "Welcome back!",
+        description: "You have been logged in.",
       })
     } catch (error) {
       toast({
@@ -40,11 +35,9 @@ export default function Auth() {
     <div className="min-h-screen flex items-center justify-center bg-[#F1F0FB] p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>{isLogin ? "Login" : "Sign Up"}</CardTitle>
+          <CardTitle>Login</CardTitle>
           <CardDescription>
-            {isLogin 
-              ? "Welcome back! Please login to continue." 
-              : "Create an account to get started."}
+            Welcome back! Please login to continue.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -69,23 +62,13 @@ export default function Auth() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                minLength={6}  // Added minimum password length
+                minLength={6}
               />
             </div>
           </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
+          <CardFooter>
             <Button type="submit" className="w-full">
-              {isLogin ? "Login" : "Sign Up"}
-            </Button>
-            <Button
-              type="button"
-              variant="link"
-              onClick={() => setIsLogin(!isLogin)}
-              className="w-full"
-            >
-              {isLogin 
-                ? "Don't have an account? Sign up" 
-                : "Already have an account? Login"}
+              Login
             </Button>
           </CardFooter>
         </form>

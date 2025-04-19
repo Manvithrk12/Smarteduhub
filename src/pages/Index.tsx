@@ -1,5 +1,4 @@
-
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { 
   UserSquare2, Users, GraduationCap, Calendar, BookOpen,
@@ -7,6 +6,7 @@ import {
 } from "lucide-react"
 import MainLayout from "@/components/layout/MainLayout"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useAuth } from "@/contexts/AuthContext"
 
 // Reusable dashboard card component
 const DashboardCard = ({ title, value, icon: Icon, description = "" }: { 
@@ -377,8 +377,14 @@ const StudentDashboard = () => {
 }
 
 const Index = () => {
-  // In a real app, this would come from an authentication context
-  const [userRole, setUserRole] = useState("admin") // Default to admin view
+  const { profile } = useAuth()
+  const [userRole, setUserRole] = useState(profile?.role || "admin")
+  
+  useEffect(() => {
+    if (profile?.role) {
+      setUserRole(profile.role)
+    }
+  }, [profile])
 
   return (
     <MainLayout>

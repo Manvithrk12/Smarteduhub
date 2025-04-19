@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { 
   Table, TableBody, TableCaption, TableCell, 
@@ -19,8 +18,29 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { TrendingDown, TrendingUp, Search, BarChart2, ChevronDown, FilterX } from "lucide-react"
 import MainLayout from "@/components/layout/MainLayout"
 
+// Performance data interface
+interface SubjectPerformance {
+  score: number
+  trend: "up" | "down" | "stable"
+}
+
+interface StudentPerformanceData {
+  id: number
+  name: string
+  grade: string
+  avgScore: number
+  attendance: number
+  subjects: {
+    mathematics: SubjectPerformance
+    physics: SubjectPerformance
+    chemistry: SubjectPerformance
+    biology: SubjectPerformance
+    english: SubjectPerformance
+  }
+}
+
 // Sample student performance data
-const initialPerformanceData = [
+const initialPerformanceData: StudentPerformanceData[] = [
   { 
     id: 1, 
     name: "John Doe", 
@@ -92,27 +112,6 @@ const initialPerformanceData = [
     } 
   },
 ]
-
-// Performance data interface
-interface SubjectPerformance {
-  score: number
-  trend: "up" | "down" | "stable"
-}
-
-interface StudentPerformanceData {
-  id: number
-  name: string
-  grade: string
-  avgScore: number
-  attendance: number
-  subjects: {
-    mathematics: SubjectPerformance
-    physics: SubjectPerformance
-    chemistry: SubjectPerformance
-    biology: SubjectPerformance
-    english: SubjectPerformance
-  }
-}
 
 // Stats calculation helper function
 const calculateStats = (data: StudentPerformanceData[]) => {

@@ -35,8 +35,34 @@ import {
 import MainLayout from "@/components/layout/MainLayout"
 import { toast } from "@/components/ui/use-toast"
 
+// Session interfaces
+interface TeacherSession {
+  id: number
+  studentName: string
+  grade: string
+  subject: string
+  topic: string
+  date: string
+  time: string
+  status: "pending" | "accepted" | "rejected" | "completed"
+  message: string
+  createdAt: string
+}
+
+interface StudentSession {
+  id: number
+  teacherName: string
+  subject: string
+  topic: string
+  date: string
+  time: string
+  status: "pending" | "accepted" | "rejected" | "completed"
+  message: string
+  createdAt: string
+}
+
 // Sample doubt sessions data for teacher view
-const initialTeacherSessions = [
+const initialTeacherSessions: TeacherSession[] = [
   { 
     id: 1, 
     studentName: "John Doe", 
@@ -100,7 +126,7 @@ const initialTeacherSessions = [
 ]
 
 // Sample doubt sessions data for student view
-const initialStudentSessions = [
+const initialStudentSessions: StudentSession[] = [
   { 
     id: 1, 
     teacherName: "Dr. Sarah Johnson", 

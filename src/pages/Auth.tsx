@@ -69,6 +69,7 @@ export default function Auth() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                minLength={6}  // Added minimum password length
               />
             </div>
           </CardContent>

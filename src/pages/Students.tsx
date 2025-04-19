@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { 
   Table, TableBody, TableCaption, TableCell, 
@@ -14,6 +13,28 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { FileText, MessageSquare, Star } from "lucide-react"
 import MainLayout from "@/components/layout/MainLayout"
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
+import { BellRing } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+import { toast } from "@/components/ui/use-toast"
+
+// Types for our data
+interface FeedbackFormToFill {
+  id: number
+  title: string
+  type: "teacher" | "course" | "infrastructure" | "exam" | "parent"
+  questions: string[]
+  teacherName: string
+  dueDate: string
+}
+
+interface AttendanceAlert {
+  id: number
+  message: string
+  date: string
+  subject: string
+  attendancePercentage: number
+}
 
 interface Assignment {
   id: number
@@ -39,6 +60,31 @@ interface Feedback {
 }
 
 // Sample data
+const pendingFeedbackForms: FeedbackFormToFill[] = [
+  {
+    id: 1,
+    title: "Mathematics Teaching Feedback",
+    type: "teacher",
+    teacherName: "Mr. Smith",
+    questions: [
+      "How would you rate the teaching methods?",
+      "Is the pace of teaching appropriate?",
+      "How clear are the explanations?",
+    ],
+    dueDate: "2025-04-25"
+  }
+]
+
+const attendanceAlerts: AttendanceAlert[] = [
+  {
+    id: 1,
+    message: "Your attendance is below required percentage in Mathematics",
+    date: "2025-04-19",
+    subject: "Mathematics",
+    attendancePercentage: 75
+  }
+]
+
 const sampleAssignments: Assignment[] = [
   {
     id: 1,
@@ -85,16 +131,121 @@ export default function Students() {
   const [activeTab, setActiveTab] = useState("assignments")
   const [showDoubtDialog, setShowDoubtDialog] = useState(false)
   const [selectedTeacher, setSelectedTeacher] = useState<DoubtSession | null>(null)
+  const [activeFeedbackForm, setActiveFeedbackForm] = useState<FeedbackFormToFill | null>(null)
+  const [answers, setAnswers] = useState<string[]>([])
+  const navigate = useNavigate()
 
   const requestDoubtSession = (teacher: DoubtSession) => {
     setSelectedTeacher(teacher)
     setShowDoubtDialog(true)
   }
 
+  const handleFeedbackSubmit = (formId: number) => {
+    // Here you would typically send the feedback to your backend
+    toast({
+      title: "Feedback Submitted",
+      description: "Thank you for your feedback!",
+    })
+    setActiveFeedbackForm(null)
+    // Redirect to principal's page after submission
+    navigate("/principals")
+  }
+
   return (
     <MainLayout>
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">Student Dashboard</h1>
+
+        {/* Attendance Alerts Section */}
+        <div className="space-y-4">
+          {attendanceAlerts.map((alert) => (
+            <Alert key={alert.id}>
+              <BellRing className="h-4 w-4" />
+              <AlertTitle className="font-medium">
+                Attendance Alert for {alert.subject}
+              </AlertTitle>
+              <AlertDescription>
+                {alert.message} - Current attendance: {alert.attendancePercentage}%
+              </AlertDescription>
+            </Alert>
+          ))}
+        </div>
+
+        {/* Pending Feedback Forms Section */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold">Pending Feedback Forms</h2>
+          <Table>
+            <TableCaption>List of feedback forms to be filled</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Title</TableHead>
+                <TableHead>Teacher</TableHead>
+                <TableHead>Due Date</TableHead>
+                <TableHead>Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {pendingFeedbackForms.map((form) => (
+                <TableRow key={form.id}>
+                  <TableCell>{form.title}</TableCell>
+                  <TableCell>{form.teacherName}</TableCell>
+                  <TableCell>{form.dueDate}</TableCell>
+                  <TableCell>
+                    <Button 
+                      variant="outline"
+                      onClick={() => setActiveFeedbackForm(form)}
+                    >
+                      Fill Feedback
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Feedback Form Dialog */}
+        <Dialog 
+          open={!!activeFeedbackForm} 
+          onOpenChange={() => setActiveFeedbackForm(null)}
+        >
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{activeFeedbackForm?.title}</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              {activeFeedbackForm?.questions.map((question, index) => (
+                <div key={index} className="space-y-2">
+                  <label className="text-sm font-medium">{question}</label>
+                  <textarea
+                    className="w-full min-h-[100px] p-2 border rounded-md"
+                    value={answers[index] || ""}
+                    onChange={(e) => {
+                      const newAnswers = [...answers]
+                      newAnswers[index] = e.target.value
+                      setAnswers(newAnswers)
+                    }}
+                  />
+                </div>
+              ))}
+              <div className="flex justify-end space-x-2">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setActiveFeedbackForm(null)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={() => activeFeedbackForm && handleFeedbackSubmit(activeFeedbackForm.id)}
+                >
+                  Submit Feedback
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Rest of the student dashboard content */}
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <TabsList>

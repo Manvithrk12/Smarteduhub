@@ -29,20 +29,8 @@ import {
 import MainLayout from "@/components/layout/MainLayout"
 import { toast } from "@/components/ui/use-toast"
 
-// Feedback form interface
-interface FeedbackForm {
-  id: number
-  title: string
-  type: "teacher" | "course" | "infrastructure" | "exam" | "parent"
-  dueDate: string
-  status: "active" | "completed" | "draft"
-  submissions: number
-  totalRecipients: number
-  lastUpdated: string
-}
-
 // Sample feedback forms data
-const initialFeedbackForms: FeedbackForm[] = [
+const initialFeedbackForms = [
   { 
     id: 1, 
     title: "Teacher Performance Evaluation", 

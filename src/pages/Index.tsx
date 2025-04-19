@@ -8,7 +8,6 @@ import MainLayout from "@/components/layout/MainLayout"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAuth } from "@/contexts/AuthContext"
 
-// Reusable dashboard card component
 const DashboardCard = ({ title, value, icon: Icon, description = "" }: { 
   title: string; 
   value: string; 
@@ -27,7 +26,6 @@ const DashboardCard = ({ title, value, icon: Icon, description = "" }: {
   </Card>
 )
 
-// Admin dashboard content
 const AdminDashboard = () => {
   const stats = [
     { title: "Total Students", value: "1,234", icon: Users },
@@ -112,7 +110,6 @@ const AdminDashboard = () => {
   )
 }
 
-// Principal dashboard content
 const PrincipalDashboard = () => {
   const stats = [
     { title: "Average Attendance", value: "87%", icon: Calendar },
@@ -173,7 +170,6 @@ const PrincipalDashboard = () => {
   )
 }
 
-// Teacher dashboard content
 const TeacherDashboard = () => {
   const stats = [
     { title: "Classes Today", value: "4", icon: Calendar },
@@ -267,7 +263,6 @@ const TeacherDashboard = () => {
   )
 }
 
-// Student dashboard content
 const StudentDashboard = () => {
   const stats = [
     { title: "Attendance", value: "92%", icon: Calendar, description: "Overall attendance rate" },
@@ -378,7 +373,7 @@ const StudentDashboard = () => {
 
 const Index = () => {
   const { profile } = useAuth()
-  const [userRole, setUserRole] = useState(profile?.role || "admin")
+  const [userRole, setUserRole] = useState<"student" | "teacher" | "principal" | "admin">(profile?.role || "admin")
   
   useEffect(() => {
     if (profile?.role) {
@@ -386,9 +381,15 @@ const Index = () => {
     }
   }, [profile])
 
+  const handleTabChange = (value: string) => {
+    if (value === "admin" || value === "principal" || value === "teacher" || value === "student") {
+      setUserRole(value)
+    }
+  }
+
   return (
     <MainLayout>
-      <Tabs defaultValue={userRole} onValueChange={setUserRole} className="space-y-6">
+      <Tabs defaultValue={userRole} onValueChange={handleTabChange} className="space-y-6">
         <TabsList className="grid w-full md:w-fit grid-cols-4">
           <TabsTrigger value="admin">Admin</TabsTrigger>
           <TabsTrigger value="principal">Principal</TabsTrigger>

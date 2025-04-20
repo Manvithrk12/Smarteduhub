@@ -15,14 +15,18 @@ import MainLayout from "@/components/layout/MainLayout"
 
 // Sample principal data
 const initialPrincipals = [
-  { id: 1, name: "Mrs. Jennifer Davis", college: "Westview Global college", employeeId: "P1002", email: "jennifer.davis@example.com", phone: "943-456-7891" },
+  { id: 1, name: "Dr. Michael Anderson", school: "Central High School", employeeId: "P1001", email: "michael.anderson@example.com", phone: "123-456-7890" },
+  { id: 2, name: "Mrs. Jennifer Davis", school: "Westview Academy", employeeId: "P1002", email: "jennifer.davis@example.com", phone: "123-456-7891" },
+  { id: 3, name: "Mr. Richard Thompson", school: "Eastside Elementary", employeeId: "P1003", email: "richard.thompson@example.com", phone: "123-456-7892" },
+  { id: 4, name: "Dr. Laura Martinez", school: "Northridge Middle School", employeeId: "P1004", email: "laura.martinez@example.com", phone: "123-456-7893" },
+  { id: 5, name: "Mr. James Wilson", school: "Southpark High School", employeeId: "P1005", email: "james.wilson@example.com", phone: "123-456-7894" },
 ]
 
 // Principal form interface
 interface PrincipalForm {
   id: number
   name: string
-  college: string
+  school: string
   employeeId: string
   email: string
   phone: string
@@ -35,7 +39,7 @@ const Principals = () => {
   const [currentPrincipal, setCurrentPrincipal] = useState<PrincipalForm>({
     id: 0,
     name: "",
-    college: "",
+    school: "",
     employeeId: "",
     email: "",
     phone: ""
@@ -44,7 +48,7 @@ const Principals = () => {
   // Filter principals based on search term
   const filteredPrincipals = principals.filter(principal => 
     principal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    principal.college.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    principal.school.toLowerCase().includes(searchTerm.toLowerCase()) ||
     principal.email.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
@@ -89,7 +93,7 @@ const Principals = () => {
     setCurrentPrincipal({
       id: 0,
       name: "",
-      college: "",
+      school: "",
       employeeId: "",
       email: "",
       phone: ""
@@ -106,7 +110,7 @@ const Principals = () => {
     setCurrentPrincipal({
       id: 0,
       name: "",
-      college: "",
+      school: "",
       employeeId: "",
       email: "",
       phone: ""
@@ -118,7 +122,7 @@ const Principals = () => {
     <MainLayout>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Principal</h1>
+          <h1 className="text-3xl font-bold">Principals</h1>
           <Button onClick={handleAddNew}>
             <Plus className="h-4 w-4 mr-2" />
             Add Principal
@@ -143,7 +147,7 @@ const Principals = () => {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead>College</TableHead>
+              <TableHead>School</TableHead>
               <TableHead>Employee ID</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Phone</TableHead>
@@ -154,7 +158,7 @@ const Principals = () => {
             {filteredPrincipals.map((principal) => (
               <TableRow key={principal.id}>
                 <TableCell className="font-medium">{principal.name}</TableCell>
-                <TableCell>{principal.college}</TableCell>
+                <TableCell>{principal.school}</TableCell>
                 <TableCell>{principal.employeeId}</TableCell>
                 <TableCell>{principal.email}</TableCell>
                 <TableCell>{principal.phone}</TableCell>
@@ -200,7 +204,7 @@ const Principals = () => {
                   <Input
                     id="school"
                     name="school"
-                    value={currentPrincipal.college}
+                    value={currentPrincipal.school}
                     onChange={handleInputChange}
                     placeholder="Enter school name"
                   />

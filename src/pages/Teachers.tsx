@@ -15,14 +15,14 @@ import MainLayout from "@/components/layout/MainLayout"
 
 // Sample teacher data
 const initialTeachers = [
-  { id: 1, name: "Dr. Aarti Deshmukh", subject: "Data Structures", employeeId: "T1001", email: "aarti.deshmukh@example.com", phone: "987-650-1101" },
-  { id: 2, name: "Prof. Rajeev Menon", subject: "Financial Accounting", employeeId: "T1002", email: "rajeev.menon@example.com", phone: "987-650-1102" },
-  { id: 3, name: "Ms. Sneha Kapoor", subject: "Database Management Systems", employeeId: "T1003", email: "sneha.kapoor@example.com", phone: "987-650-1103" },
-  { id: 4, name: "Mr. Anil Reddy", subject: "Business Communication", employeeId: "T1004", email: "anil.reddy@example.com", phone: "987-650-1104" },
-  { id: 5, name: "Dr. Kavita Sharma", subject: "Computer Networks", employeeId: "T1005", email: "kavita.sharma@example.com", phone: "987-650-1105" },
-  { id: 6, name: "Ms. Pooja Singh", subject: "Human Resource Management", employeeId: "T1006", email: "pooja.singh@example.com", phone: "987-650-1106" },
-  { id: 7, name: "Mr. Arjun Patel", subject: "Software Engineering", employeeId: "T1007", email: "arjun.patel@example.com", phone: "987-650-1107" },
-  { id: 8, name: "Dr. Meera Iyer", subject: "Marketing Management", employeeId: "T1008", email: "meera.iyer@example.com", phone: "987-650-1108" },
+  { id: 1, name: "Dr. Sarah Johnson", subject: "Mathematics", employeeId: "T1001", email: "sarah.johnson@example.com", phone: "123-456-7890" },
+  { id: 2, name: "Prof. James Wilson", subject: "Physics", employeeId: "T1002", email: "james.wilson@example.com", phone: "123-456-7891" },
+  { id: 3, name: "Ms. Emily Parker", subject: "Biology", employeeId: "T1003", email: "emily.parker@example.com", phone: "123-456-7892" },
+  { id: 4, name: "Mr. David Miller", subject: "Chemistry", employeeId: "T1004", email: "david.miller@example.com", phone: "123-456-7893" },
+  { id: 5, name: "Dr. Robert Brown", subject: "English Literature", employeeId: "T1005", email: "robert.brown@example.com", phone: "123-456-7894" },
+  { id: 6, name: "Ms. Jessica Taylor", subject: "History", employeeId: "T1006", email: "jessica.taylor@example.com", phone: "123-456-7895" },
+  { id: 7, name: "Mr. Michael Thomas", subject: "Computer Science", employeeId: "T1007", email: "michael.thomas@example.com", phone: "123-456-7896" },
+  { id: 8, name: "Dr. Jennifer Adams", subject: "Psychology", employeeId: "T1008", email: "jennifer.adams@example.com", phone: "123-456-7897" },
 ]
 
 // Updated Teacher form interface with id as required

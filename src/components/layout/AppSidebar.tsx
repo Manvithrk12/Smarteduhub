@@ -2,10 +2,9 @@
 import { useState } from "react"
 import { NavLink } from "react-router-dom"
 import { 
-  School, Users, UserCog, GraduationCap, 
+  School, Users, UserCog, GraduationCap, Settings, 
   BookOpen, CalendarCheck, FileText, MessageSquare, 
-  AlertTriangle, PieChart, ClipboardCheck, UserCircle,
-  icons
+  AlertTriangle, PieChart, ClipboardCheck, UserCircle
 } from "lucide-react"
 import {
   Sidebar,
@@ -17,19 +16,16 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import Edulogo from "../assets/Smarteduhub1.png"
-import { title } from "process"
-import { url } from "inspector"
 
 // Define menu items for each role
 const adminMenuItems = [
   { title: "Dashboard", icon: School, url: "/" },
   { title: "Students", icon: Users, url: "/students" },
   { title: "Teachers", icon: UserCog, url: "/teachers" },
-  { title: "Principal", icon: GraduationCap, url: "/principals" },
+  { title: "Principals", icon: GraduationCap, url: "/principals" },
   { title: "Attendance Notices", icon: AlertTriangle, url: "/attendance-notices" },
   { title: "Profile", icon: UserCircle, url: "/profile" },
-  
+  { title: "Settings", icon: Settings, url: "/settings" },
 ]
 
 const principalMenuItems = [
@@ -53,7 +49,6 @@ const studentMenuItems = [
   { title: "Attendance", icon: CalendarCheck, url: "/attendance" },
   { title: "Assignments", icon: FileText, url: "/assignments" },
   { title: "Feedback Forms", icon: ClipboardCheck, url: "/feedback-forms" },
-  {title: "Alerts", icon:AlertTriangle, url:"/studentalert"},
   { title: "Profile", icon: UserCircle, url: "/profile" },
 ]
 
@@ -86,7 +81,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <div className="p-4">
-          <img src={Edulogo} alt="Smartedu logo" className="w-200 h-500" />
+          <h1 className="text-2xl font-bold text-primary">SmartEduHub</h1>
           
           {/* Role switcher (for demo only) */}
           <div className="mt-4">

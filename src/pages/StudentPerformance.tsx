@@ -27,7 +27,7 @@ interface SubjectPerformance {
 interface StudentPerformanceData {
   id: number
   name: string
-  grade: string
+  class: string
   avgScore: number
   attendance: number
   subjects: {
@@ -44,7 +44,7 @@ const initialPerformanceData: StudentPerformanceData[] = [
   { 
     id: 1, 
     name: "John Doe", 
-    grade: "10th", 
+    class: "BCA", 
     avgScore: 85, 
     attendance: 92, 
     subjects: {
@@ -58,7 +58,7 @@ const initialPerformanceData: StudentPerformanceData[] = [
   { 
     id: 2, 
     name: "Emma Wilson", 
-    grade: "10th", 
+    class: "BCA", 
     avgScore: 92, 
     attendance: 95, 
     subjects: {
@@ -72,7 +72,7 @@ const initialPerformanceData: StudentPerformanceData[] = [
   { 
     id: 3, 
     name: "Michael Brown", 
-    grade: "11th", 
+    class: "BCA", 
     avgScore: 75, 
     attendance: 80, 
     subjects: {
@@ -86,7 +86,7 @@ const initialPerformanceData: StudentPerformanceData[] = [
   { 
     id: 4, 
     name: "Sophia Garcia", 
-    grade: "9th", 
+    class: "BCA", 
     avgScore: 88, 
     attendance: 90, 
     subjects: {
@@ -100,7 +100,7 @@ const initialPerformanceData: StudentPerformanceData[] = [
   { 
     id: 5, 
     name: "William Martinez", 
-    grade: "12th", 
+    class: "BCA", 
     avgScore: 79, 
     attendance: 85, 
     subjects: {
@@ -137,7 +137,7 @@ const StudentPerformance = () => {
   // Filter performance data based on search term and grade
   const filteredData = performanceData.filter(student => {
     const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesGrade = gradeFilter === "all" || student.grade.includes(gradeFilter)
+    const matchesGrade = gradeFilter === "all" || student.class.includes(gradeFilter)
     return matchesSearch && matchesGrade
   })
 
@@ -244,16 +244,14 @@ const StudentPerformance = () => {
           <div className="w-[180px]">
             <Select value={gradeFilter} onValueChange={handleGradeChange}>
               <SelectTrigger>
-                <SelectValue placeholder="Filter by grade" />
+                <SelectValue placeholder="Filter by class" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Grades</SelectLabel>
-                  <SelectItem value="all">All Grades</SelectItem>
-                  <SelectItem value="9th">9th Grade</SelectItem>
-                  <SelectItem value="10th">10th Grade</SelectItem>
-                  <SelectItem value="11th">11th Grade</SelectItem>
-                  <SelectItem value="12th">12th Grade</SelectItem>
+                  <SelectLabel>Class</SelectLabel>
+                  <SelectItem value="all">All classes</SelectItem>
+                  <SelectItem value="9th">BCA</SelectItem>
+                  <SelectItem value="10th">BBA</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -265,7 +263,7 @@ const StudentPerformance = () => {
           <TableHeader>
             <TableRow>
               <TableHead>Student</TableHead>
-              <TableHead>Grade</TableHead>
+              <TableHead>Class</TableHead>
               <TableHead>Mathematics</TableHead>
               <TableHead>Physics</TableHead>
               <TableHead>Chemistry</TableHead>
@@ -279,7 +277,7 @@ const StudentPerformance = () => {
             {filteredData.map((student) => (
               <TableRow key={student.id}>
                 <TableCell className="font-medium">{student.name}</TableCell>
-                <TableCell>{student.grade}</TableCell>
+                <TableCell>{student.class}</TableCell>
                 <TableCell>
                   <div className="flex items-center">
                     <span className={getScoreColorClass(student.subjects.mathematics.score)}>

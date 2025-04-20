@@ -1,6 +1,7 @@
 
+import { Users, UserSquare2, GraduationCap, Calendar, AlertCircle } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { AlertCircle, CheckCircle, Users, UserSquare2, GraduationCap, Calendar } from "lucide-react"
+import { StatsGrid } from "./components/StatsGrid"
 
 export const AdminDashboard = () => {
   const stats = [
@@ -13,19 +14,7 @@ export const AdminDashboard = () => {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.title}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">{stat.title}</CardTitle>
-              <stat.icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <StatsGrid stats={stats} />
       
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
